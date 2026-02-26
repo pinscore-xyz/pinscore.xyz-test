@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Canonical Event Schema",
+  "description": "Pinscore v1 — frozen canonical event structure",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "platform", "creator_id", "event_type", "value", "timestamp"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "UUID v4 — globally unique — system-generated"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["instagram", "twitter", "youtube", "tiktok"],
+      "description": "Source platform — enum-controlled — lowercase only"
+    },
+    "creator_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Creator identifier — always sourced from JWT"
+    },
+    "fan_id": {
+      "type": ["string", "null"],
+      "description": "Fan identifier — nullable when platform does not expose identity"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": ["like", "comment", "share", "save", "follow", "click", "mention", "view", "profile_visit"],
+      "description": "Atomic fan action type — maps to deterministic weight"
+    },
+    "value": {
+      "type": "number",
+      "description": "Event magnitude — stored, not derived — default 1"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional structured context — must not override required fields — max 5KB"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp — timezone indicator required"
+    }
+  }
+}
